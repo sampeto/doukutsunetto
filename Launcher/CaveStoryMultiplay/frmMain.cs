@@ -32,7 +32,53 @@ namespace CaveStoryMultiplay
         {
             if (SpawnCaveStoryProcess())
             {
+                Ninjector.Ninjector dllInjector = new Ninjector.Ninjector();
+                IntPtr injectionPointer = IntPtr.Zero;
 
+                System.Diagnostics.Process doukutsuProcess = System.Diagnostics.Process.GetProcessesByName("Doukutsu")[0];
+
+                try
+                {
+                    dllInjector.Inject(doukutsuProcess, "DNServer.dll", out injectionPointer);
+
+                    if (injectionPointer == IntPtr.Zero)    // injection not successful
+                    {
+                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error starting Cave Story (is Doukutsu.exe in the same directory?)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnStartClient_Click(object sender, EventArgs e)
+        {
+            if (SpawnCaveStoryProcess())
+            {
+                Ninjector.Ninjector dllInjector = new Ninjector.Ninjector();
+                IntPtr injectionPointer = IntPtr.Zero;
+
+                System.Diagnostics.Process doukutsuProcess = System.Diagnostics.Process.GetProcessesByName("Doukutsu")[0];
+
+                try
+                {
+                    dllInjector.Inject(doukutsuProcess, "DNClient.dll", out injectionPointer);
+
+                    if (injectionPointer == IntPtr.Zero)    // injection not successful
+                    {
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {

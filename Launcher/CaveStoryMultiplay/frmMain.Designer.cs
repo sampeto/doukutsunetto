@@ -50,6 +50,7 @@
             this.btnStartClient.TabIndex = 1;
             this.btnStartClient.Text = "Start Client";
             this.btnStartClient.UseVisualStyleBackColor = true;
+            this.btnStartClient.Click += new System.EventHandler(this.btnStartClient_Click);
             // 
             // frmMain
             // 
