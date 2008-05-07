@@ -3,135 +3,14 @@
 #include <winsock.h>
 #include <stdio.h>
 
+#include "buffer.h"
+
 #define WSCK_ERROR -1
 #define WSCK_OK     0
 
 #pragma comment(linker, "/ENTRY:DllMain")
 
 bool poll_exit = false;
-
-// This will eventually get its own file
-class Buffer
-{
-public:
-	Buffer(int size);
-	~Buffer();
-
-	void Resize(int len);
-
-	void WriteByte(BYTE val);
-	void WriteShort(short val);
-	void WriteInt(int val);
-	//void WriteLong(long val);// UNUSED
-	void WriteString(char* val);
-	void WriteShortLengthString(char* val);
-
-	BYTE* GetBytes() {return BufferData;};
-
-private:
-	BYTE *BufferData;
-	int Index;
-	int Length;
-};
-
-Buffer::Buffer(int size)
-{
-	BufferData = new BYTE[size];
-	Index = 0;
-	Length = size;
-}
-Buffer::~Buffer()
-{
-	delete[] BufferData;
-	Index = 0;
-}
-
-// **NOTE: Resize will keep old index unless new length is less than old length
-void Buffer::Resize(int len)
-{
-	BYTE *NewBuffer = new BYTE[len];
-
-	for (int iter = 0; iter < Length; ++iter)
-	{
-		NewBuffer[iter] = BufferData[iter];
-	}
-
-	// delete old buffer, remake it, copy new buffer to old buffer, and delete new buffer
-	delete[] BufferData;
-	BufferData = new BYTE[len];
-	memcpy(BufferData, NewBuffer, len);
-	delete[] NewBuffer;
-
-	if (Index > len)
-		Index = len;
-
-	Length = len;
-}
-
-void Buffer::WriteByte(BYTE val)
-{
-	BufferData[Index] = val;
-	++Index;
-	++Length;
-}
-void Buffer::WriteShort(short val)
-{
-	if (Index + 2 > Length)
-		Resize(Index - Length + 2);
-
-	BufferData[Index] = (BYTE)val;
-	++Index;
-	BufferData[Index] = (BYTE)(val / 256);
-	++Index;
-
-	Length += 2;
-}
-void Buffer::WriteInt(int val)
-{
-	if (Index + 4 > Length)
-		Resize(Index - Length + 4);
-
-	BufferData[Index] = (BYTE)val;
-	++Index;
-	BufferData[Index] = (BYTE)(val / 256);
-	++Index;
-	BufferData[Index] = (BYTE)(val / 65536);
-	++Index;
-	BufferData[Index] = (BYTE)(val / 16777216);
-	++Index;
-
-	Index += 4;
-	Length += 4;
-}
-void Buffer::WriteString(char* val)
-{
-	if (Index + sizeof(val) > Length)
-		Resize(Index - Length + sizeof(val));
-
-	for (int iter = 0; iter < sizeof(val); ++iter)
-	{
-		BufferData[Index] = val[Index];
-		++Index;
-	}
-
-	Length += sizeof(val);
-}
-// This is different from WriteString in the fact that it writes the string's length
-// before writing the string
-void Buffer::WriteShortLengthString(char* val)
-{
-	if (Index + sizeof(val) > Length)
-		Resize(Index - Length + sizeof(val));
-	
-	WriteShort(sizeof(val));
-	for (int iter = 0; iter < sizeof(val); ++iter)
-	{
-		BufferData[Index] = val[Index];
-		++Index;
-	}
-
-	Length += sizeof(val);
-}
 
 DWORD ServerHandler()
 {
