@@ -39,7 +39,7 @@ namespace CaveStoryMultiplay
 
                 try
                 {
-                    dllInjector.Inject(doukutsuProcess, "DNServer.dll", out injectionPointer);
+                    dllInjector.Inject(doukutsuProcess, "DoukutsuNetto_Server.dll", out injectionPointer);
 
                     if (injectionPointer == IntPtr.Zero)    // injection not successful
                     {
@@ -68,7 +68,7 @@ namespace CaveStoryMultiplay
 
                 try
                 {
-                    dllInjector.Inject(doukutsuProcess, "DNClient.dll", out injectionPointer);
+                    dllInjector.Inject(doukutsuProcess, "DoukutsuNetto_Client.dll", out injectionPointer);
 
                     if (injectionPointer == IntPtr.Zero)    // injection not successful
                     {
