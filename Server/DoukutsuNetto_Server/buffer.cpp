@@ -10,6 +10,7 @@ Buffer::~Buffer()
 {
 	delete[] BufferData;
 	Index = 0;
+	Length = 0;
 }
 
 // **NOTE: Resize will keep old index unless new length is less than old length

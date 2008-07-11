@@ -41,6 +41,17 @@ public:
 	// gets bytes in buffer
 	BYTE* GetBytes() {return BufferData;};
 
+	// gets length of buffer
+	int GetLength() {return Length;};
+
+	// sets the index
+	void SetIndex(int val) {if(val>Length)Index=Length;else Index=val;};
+	// gets the index
+	int GetIndex() {return Index;};
+
+	// erases everything in the buffer and resets it as if it was just constructed
+	//void Clear() {~Buffer();Buffer(1)};
+
 private:
 	// bytes in buffer
 	BYTE *BufferData;
