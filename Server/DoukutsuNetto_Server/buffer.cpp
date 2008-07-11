@@ -67,7 +67,6 @@ void Buffer::WriteInt(int val)
 	BufferData[Index] = (BYTE)(val / 16777216);
 	++Index;
 
-	Index += 4;
 	Length += 4;
 }
 void Buffer::WriteString(char* val)
